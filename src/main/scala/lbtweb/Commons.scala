@@ -10,7 +10,7 @@ case class BusRouteWithTowards(id: String, direction: String, towards: String)
 case class IncomingHistoricalRecord(busRoute: BusRoute, vehicleID: String, stopRecords: List[IncomingVehicleStopRecord])
 case class IncomingVehicleStopRecord(seqNo: Int, stopID: String, stopName: String, arrivalTime: Long)
 
-case class RouteStats(average: Double)
+case class RouteStats(average: Int, min: Int, max: Int)
 
 object Commons {
 

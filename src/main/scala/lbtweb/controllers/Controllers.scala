@@ -70,7 +70,7 @@ class Controllers(config: ServerConfig) {
       seqNoArrTimeWithoutLast = seqNoArrTime.dropRight(1)
       result = seqNoArrTimeWithoutLast.dropRight(1).map(_._1) zip (seqNoArrTimeWithoutLast drop 1, seqNoArrTimeWithoutLast).zipped.map(_._2 - _._2)
     } yield result
-    timeDiffBetweenStops.flatten.groupBy(_._1).mapValues(x => RouteStats((x.map(_._2).avg / 1000).round))
+    timeDiffBetweenStops.flatten.groupBy(_._1).mapValues(x => RouteStats((x.map(_._2).avg / 1000).toInt, (x.map(_._2).min / 1000).toInt, (x.map(_._2).max / 1000).toInt))
   }
 
 //  def getStopDetails(stopID: String) = {
