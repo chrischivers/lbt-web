@@ -1,0 +1,35 @@
+<%@ import
+val title: String %>
+<%@ import
+val busRoute: lbtweb.BusRoute %>
+<%@ import
+val stopDefList: List[lbtweb.BusStop] %>
+<%@ import
+val routeArrivalList: List[(String, Map[Int, String])] %>
+
+<div class="row">
+<div class="span10">
+    <h2><%= title %> </h2>
+    <p>
+        <table class="table table-bordered">
+        <tr>
+        <td>Vehicle Reg</td>
+        #for(h <- stopDefList.indices)
+            <td>${h + 1},
+            <a href="/stoparrivalhistory/${stopDefList(h).id}">${stopDefList(h).id}</a>,
+            ${stopDefList(h).name}</td>
+        #end
+        </tr>
+
+        #for(i <- routeArrivalList.indices)
+            <tr>
+                <td><a href="/vehiclearrivalhistory/${routeArrivalList(i)._1}">${routeArrivalList(i)._1}</a></td>
+                #for(j <- stopDefList.indices)
+                    <td>${routeArrivalList(i)._2.getOrElse(j + 1, "")}</td>
+                #end
+            </tr>
+        #end
+        </table>
+    </p>
+</div>
+</div>

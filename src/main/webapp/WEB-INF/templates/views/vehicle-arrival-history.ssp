@@ -1,0 +1,29 @@
+<%@ import
+val title: String %>
+<%@ import
+val vehicleArrivalList: List[(lbtweb.BusRoute, List[(Int, String, String, String)])] %>
+<div class="row">
+<div class="span6">
+    <h2><%= title %> </h2>
+    <p>
+        <table class="table table-bordered">
+        #for(i <- vehicleArrivalList.indices)
+            <tr>
+                <td colspan="4">
+                <a href="/routearrivalhistory/${vehicleArrivalList(i)._1.id}/${vehicleArrivalList(i)._1.direction}">${vehicleArrivalList(i)._1.id}, ${vehicleArrivalList(i)._1.direction}</a></td>
+            </tr>
+            #for(j <- vehicleArrivalList(i)._2.indices)
+                <tr>
+                    <td>${vehicleArrivalList(i)._2(j)._1}</td>
+                    <td><a href="/stoparrivalhistory/${vehicleArrivalList(i)._2(j)._2}">${vehicleArrivalList(i)._2(j)._2}</a></td>
+                    <td>${vehicleArrivalList(i)._2(j)._3}</td>
+                    <td>${vehicleArrivalList(i)._2(j)._4}</td>
+                </tr>
+            #end
+
+        #end
+
+        </table>
+    </p>
+</div>
+</div>

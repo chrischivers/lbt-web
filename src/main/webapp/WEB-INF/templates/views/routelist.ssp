@@ -1,0 +1,29 @@
+<%@ import
+val title: String %>
+<%@ import
+val busRouteList: List[(String, List[(String, String)])]  %>
+<div class="row">
+<div class="span6">
+    <h2><%= title %> </h2>
+    <p>
+        <table class="table table-bordered">
+        <tr>
+            <td>Route</td>
+            <td>Inbound Direction</td>
+            <td>Outbound Direction</td>
+        </tr>
+        #for(i <- busRouteList.indices)
+            <tr>
+                <td>${busRouteList(i)._1}</td>
+                #for(j <- busRouteList(i)._2.indices)
+                    <td><a href="/routearrivalhistory/${busRouteList(i)._1}/${busRouteList(i)._2(j)._1}">
+                    Towards ${busRouteList(i)._2(j)._2}
+                    </a></td>
+                #end
+            </tr>
+        #end
+
+        </table>
+    </p>
+</div>
+</div>
