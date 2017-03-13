@@ -5,9 +5,14 @@ import net.liftweb.json._
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 
+import scala.collection.immutable.Seq
 import scala.io.Source
 
 class Controllers(config: ServerConfig) {
+
+  implicit def iterebleWithAvg[T:Numeric](data:Iterable[T]) = new {
+    def avg = Commons.average(data)
+  }
 
   val dtf: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")
   implicit val formats = DefaultFormats
@@ -30,7 +35,7 @@ class Controllers(config: ServerConfig) {
     parse(res).extract[List[BusStop]]
   }
 
-  def getRouteArrivalHistory(busRoute: BusRoute): List[(String, Map[Int, String])] = {
+  def getRouteArrivalHistoryData(busRoute: BusRoute): List[(String, Map[Int, String])] = {
     val res = Source.fromURL(serverPrefix + "busroute/" + busRoute.id + "/" + busRoute.direction).mkString
     val received = parse(res).extract[List[IncomingHistoricalRecord]]
     assert(!received.exists(x => x.busRoute != busRoute))
@@ -54,6 +59,18 @@ class Controllers(config: ServerConfig) {
     assert(!received.exists(x => x.vehicleID != vehicleID))
     received.map(x => (x.busRoute, x.stopRecords.sortBy(_.arrivalTime)(Ordering[Long].reverse)
       .map(y => (y.seqNo, y.stopID, y.stopName, dtf.print(y.arrivalTime)))))
+  }
+
+  def getRouteArrivalHistoryStats(busRoute: BusRoute): Map[Int, RouteStats] = {
+    val res = Source.fromURL(serverPrefix + "busroute/" + busRoute.id + "/" + busRoute.direction).mkString
+    val received = parse(res).extract[List[IncomingHistoricalRecord]]
+    assert(!received.exists(x => x.busRoute != busRoute))
+    val timeDiffBetweenStops  = for {
+      seqNoArrTime <- received.map(x => x.stopRecords.map(y => (y.seqNo, y.arrivalTime)))
+      seqNoArrTimeWithoutLast = seqNoArrTime.dropRight(1)
+      result = seqNoArrTimeWithoutLast.dropRight(1).map(_._1) zip (seqNoArrTimeWithoutLast drop 1, seqNoArrTimeWithoutLast).zipped.map(_._2 - _._2)
+    } yield result
+    timeDiffBetweenStops.flatten.groupBy(_._1).mapValues(x => RouteStats((x.map(_._2).avg / 1000).round))
   }
 
 //  def getStopDetails(stopID: String) = {

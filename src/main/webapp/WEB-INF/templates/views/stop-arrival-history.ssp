@@ -11,7 +11,7 @@ val stopArrivalList: List[(lbtweb.BusRoute, String, String)] %>
         <table class="table table-bordered">
         #for(i <- stopArrivalList.indices)
             <tr>
-                <td> <a href="/routearrivalhistory/${stopArrivalList(i)._1.id}/${stopArrivalList(i)._1.direction}">${stopArrivalList(i)._1.id}, ${stopArrivalList(i)._1.direction}</a></td>
+                <td> <a href="/routearrivalhistorydata/${stopArrivalList(i)._1.id}/${stopArrivalList(i)._1.direction}">${stopArrivalList(i)._1.id}, ${stopArrivalList(i)._1.direction}</a></td>
                 <td><a href="/vehiclearrivalhistory/${stopArrivalList(i)._2}">${stopArrivalList(i)._2}</a></td>
                 <td>${stopArrivalList(i)._3}</td>
             </tr>

@@ -10,7 +10,7 @@ val vehicleArrivalList: List[(lbtweb.BusRoute, List[(Int, String, String, String
         #for(i <- vehicleArrivalList.indices)
             <tr>
                 <td colspan="4">
-                <a href="/routearrivalhistory/${vehicleArrivalList(i)._1.id}/${vehicleArrivalList(i)._1.direction}">${vehicleArrivalList(i)._1.id}, ${vehicleArrivalList(i)._1.direction}</a></td>
+                <a href="/routearrivalhistorydata/${vehicleArrivalList(i)._1.id}/${vehicleArrivalList(i)._1.direction}">${vehicleArrivalList(i)._1.id}, ${vehicleArrivalList(i)._1.direction}</a></td>
             </tr>
             #for(j <- vehicleArrivalList(i)._2.indices)
                 <tr>

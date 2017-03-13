@@ -5,22 +5,27 @@ val busRoute: lbtweb.BusRoute %>
 <%@ import
 val stopDefList: List[lbtweb.BusStop] %>
 <%@ import
-val routeArrivalList: Map[Int, Int] %>
+val routeArrivalList: Map[Int, lbtweb.RouteStats] %>
 
 <div class="row">
 <div class="span10">
     <h2><%= title %> </h2>
     <p>
         <table class="table table-bordered">
+        <tr>
+        <td>Stop</td>
+        <td>Time (s) to next stop</td>
+        </tr>
 
         #for(h <- stopDefList.indices)
-            <tr>${h + 1},
+            <tr>
             <td>
-            <a href="/stoparrivalhistory/${stopDefList(h).id}">${stopDefList(h).id}</a>,
-            ${stopDefList(h).name}
+                ${h + 1},
+                <a href="/stoparrivalhistory/${stopDefList(h).id}">${stopDefList(h).id}</a>,
+                ${stopDefList(h).name}
             </td>
             <td>
-                ${routeArrivalList.getOrElse(h + 1, 0)}}
+                ${routeArrivalList.get(h + 1).map(_.average).getOrElse("N/A")}
             </td>
             </tr>
         #end

@@ -24,12 +24,12 @@ class LbtServlet extends LbtwebStack {
       ssp("stoplist", "title" -> s"Stop List for ${params("routeID")}, ${params("direction")}", "busRoute" -> busRoute, "stopList" -> stopList)
     }
 
-  get("/routearrivalhistory/:routeID/:direction") {
+  get("/routearrivalhistorydata/:routeID/:direction") {
     val busRoute = BusRoute(params("routeID"), params("direction"))
-    val routeHistory = controllers.getRouteArrivalHistory(busRoute)
     val stopDefList = controllers.getStopList(busRoute)
+    val routeHistoryData = controllers.getRouteArrivalHistoryData(busRoute)
     contentType="text/html"
-    ssp("route-arrival-history-table", "title" -> s"Route Arrival List for ${busRoute.id}, ${busRoute.direction}", "busRoute" -> busRoute, "stopDefList" -> stopDefList, "routeArrivalList" -> routeHistory)
+    ssp("route-arrival-history-data", "title" -> s"Route Arrival List for ${busRoute.id}, ${busRoute.direction}", "busRoute" -> busRoute, "stopDefList" -> stopDefList, "routeArrivalList" -> routeHistoryData)
   }
 
   get("/stoparrivalhistory/:stopID") {
@@ -44,6 +44,14 @@ class LbtServlet extends LbtwebStack {
     val vehicleHistory = controllers.getVehicleArrivalHistory(vehicleID)
     contentType="text/html"
     ssp("vehicle-arrival-history", "title" -> s"Vehicle Arrival History List for $vehicleID", "vehicleArrivalList" -> vehicleHistory)
+  }
+
+  get("/routearrivalhistorystats/:routeID/:direction") {
+    val busRoute = BusRoute(params("routeID"), params("direction"))
+    val stopDefList = controllers.getStopList(busRoute)
+    val routeHistoryStats = controllers.getRouteArrivalHistoryStats(busRoute)
+    contentType="text/html"
+    ssp("route-arrival-history-stats", "title" -> s"Route Arrival Stats for ${busRoute.id}, ${busRoute.direction}", "busRoute" -> busRoute, "stopDefList" -> stopDefList, "routeArrivalList" -> routeHistoryStats)
   }
 
 }
