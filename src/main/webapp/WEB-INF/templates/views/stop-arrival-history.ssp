@@ -1,19 +1,24 @@
 <%@ import
 val title: String %>
 <%@ import
-val busStopID: String%>
+val busStopOpt: Option[lbtweb.BusStop]%>
 <%@ import
-val stopArrivalList: List[(lbtweb.BusRoute, String, String)] %>
+val stopArrivalList: List[(lbtweb.BusRoute, lbtweb.VehicleReg, lbtweb.ArrivalTime)] %>
 <div class="row">
 <div class="span6">
     <h2><%= title %> </h2>
     <p>
         <table class="table table-bordered">
+        <tr>
+            <td>Route</td>
+            <td>Vehicle Reg</td>
+            <td>Arrived at</td>
+        </tr>
         #for(i <- stopArrivalList.indices)
             <tr>
                 <td> <a href="/routearrivalhistorydata/${stopArrivalList(i)._1.id}/${stopArrivalList(i)._1.direction}">${stopArrivalList(i)._1.id}, ${stopArrivalList(i)._1.direction}</a></td>
-                <td><a href="/vehiclearrivalhistory/${stopArrivalList(i)._2}">${stopArrivalList(i)._2}</a></td>
-                <td>${stopArrivalList(i)._3}</td>
+                <td><a href="/vehiclearrivalhistory/${stopArrivalList(i)._2.value}">${stopArrivalList(i)._2.value}</a></td>
+                <td>${stopArrivalList(i)._3.toFormattedString}</td>
             </tr>
         #end
 

@@ -1,0 +1,31 @@
+<%@ import
+val title: String %>
+    <%@ import
+    val busRoute: lbtweb.BusRoute %>
+    <%@ import
+    val fromStop: lbtweb.BusStop %>
+    <%@ import
+    val toStop: lbtweb.BusStop %>
+    <%@ import
+    val stats: lbtweb.Stats %>
+
+    <div class="row">
+    <div class="span10">
+        <h2><%= title %> </h2>
+        <p>
+            <table class="table table-bordered">
+            <tr>
+                <td>Average time to travel between ${fromStop} and ${toStop} (seconds)</td>
+                <td>Minimum time to travel between ${fromStop} and ${toStop} (seconds)</td>
+                <td>Maximum time to travel between ${fromStop} and ${toStop} (seconds)</td>
+            </tr>
+                <tr>
+                    <td align="center">${stats.average}</td>
+                    <td align="center"> ${stats.max}</td>
+                    <td align="center">${stats.min}</td>
+                </tr>
+            </tr>
+        </table>
+    </p>
+    </div>
+</div>

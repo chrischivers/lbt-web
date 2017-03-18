@@ -5,12 +5,11 @@ val busRoute: lbtweb.BusRoute %>
 <%@ import
 val stopDefList: List[lbtweb.BusStop] %>
 <%@ import
-val routeArrivalList: List[(String, Map[Int, String])] %>
+val routeArrivalList: List[(lbtweb.VehicleReg, Map[lbtweb.SequenceNo, lbtweb.ArrivalTime])] %>
 
 <div class="row">
 <div class="span10">
     <h2><%= title %> </h2>
-    <p><a href="/routearrivalhistorystats/${busRoute.id}/${busRoute.direction}">Stats</a></p>
     <p>
         <table class="table table-bordered">
         <tr>
@@ -24,9 +23,9 @@ val routeArrivalList: List[(String, Map[Int, String])] %>
 
         #for(i <- routeArrivalList.indices)
             <tr>
-                <td><a href="/vehiclearrivalhistory/${routeArrivalList(i)._1}">${routeArrivalList(i)._1}</a></td>
+                <td><a href="/vehiclearrivalhistory/${routeArrivalList(i)._1.value}">${routeArrivalList(i)._1.value}</a></td>
                 #for(j <- stopDefList.indices)
-                    <td>${routeArrivalList(i)._2.getOrElse(j + 1, "")}</td>
+                    <td>${routeArrivalList(i)._2.getOrElse(lbtweb.SequenceNo(j + 1), lbtweb.ArrivalTime(0)).toFormattedString}</td>
                 #end
             </tr>
         #end

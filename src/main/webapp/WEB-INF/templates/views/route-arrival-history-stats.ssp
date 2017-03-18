@@ -5,7 +5,7 @@ val title: String %>
     <%@ import
     val stopDefList: List[lbtweb.BusStop] %>
     <%@ import
-    val routeArrivalList: Map[Int, lbtweb.RouteStats] %>
+    val routeArrivalList: Map[lbtweb.SequenceNo, lbtweb.Stats] %>
 
     <div class="row">
     <div class="span10">
@@ -25,9 +25,9 @@ val title: String %>
                         <a href="/stoparrivalhistory/${stopDefList(h).id}">${stopDefList(h).id}</a>,
                         ${stopDefList(h).name}
                     </td>
-                    <td align="center">${routeArrivalList.get(h + 1).map(_.average).getOrElse("N/A")}</td>
-                    <td align="center"> ${routeArrivalList.get(h + 1).map(_.min).getOrElse("N/A")}</td>
-                    <td align="center">${routeArrivalList.get(h + 1).map(_.max).getOrElse("N/A")}</td>
+                    <td align="center">${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(_.average).getOrElse("N/A")}</td>
+                    <td align="center"> ${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(_.min).getOrElse("N/A")}</td>
+                    <td align="center">${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(_.max).getOrElse("N/A")}</td>
                 </tr>
             #end
             </tr>

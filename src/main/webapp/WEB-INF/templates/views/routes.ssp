@@ -16,7 +16,7 @@ val busRouteList: List[(String, List[(String, String)])]  %>
             <tr>
                 <td>${busRouteList(i)._1}</td>
                 #for(j <- busRouteList(i)._2.indices)
-                    <td><a href="/routearrivalhistorydata/${busRouteList(i)._1}/${busRouteList(i)._2(j)._1}">
+                    <td><a href="/route/${busRouteList(i)._1}/${busRouteList(i)._2(j)._1}">
                     Towards ${busRouteList(i)._2(j)._2}
                     </a></td>
                 #end
