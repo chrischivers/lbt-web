@@ -5,7 +5,7 @@ val busRoute: lbtweb.BusRoute %>
 <%@ import
 val stopDefList: List[lbtweb.BusStop] %>
 <%@ import
-val routeArrivalList: List[(lbtweb.VehicleReg, Map[lbtweb.SequenceNo, lbtweb.ArrivalTime])] %>
+val routeArrivalList: List[(lbtweb.VehicleReg, lbtweb.Source, Map[lbtweb.SequenceNo, lbtweb.ArrivalTime])] %>
 
 <div class="row">
 <div class="span10">
@@ -16,16 +16,23 @@ val routeArrivalList: List[(lbtweb.VehicleReg, Map[lbtweb.SequenceNo, lbtweb.Arr
         <td>Vehicle Reg</td>
         #for(h <- stopDefList.indices)
             <td>${h + 1},
-            <a href="/stoparrivalhistory/${stopDefList(h).id}">${stopDefList(h).id}</a>,
-            ${stopDefList(h).name}</td>
+            <a href="/stoparrivalhistory/${stopDefList(h).stopID}">${stopDefList(h).stopID}</a>,
+            ${stopDefList(h).stopName}</td>
         #end
         </tr>
 
         #for(i <- routeArrivalList.indices)
-            <tr>
+
+            <%val backgroundCol = routeArrivalList(i)._2.value match {
+            case "Live" => "#ffff99"
+            case "DB" => "#99ccff"
+            case _ => "#ffffff"
+            }%>
+
+            <tr bgcolor="${backgroundCol}">
                 <td><a href="/vehiclearrivalhistory/${routeArrivalList(i)._1.value}">${routeArrivalList(i)._1.value}</a></td>
                 #for(j <- stopDefList.indices)
-                    <td>${routeArrivalList(i)._2.getOrElse(lbtweb.SequenceNo(j + 1), lbtweb.ArrivalTime(0)).toFormattedString}</td>
+                    <td>${routeArrivalList(i)._3.get(lbtweb.SequenceNo(j + 1)).map(time => lbtweb.ArrivalTime(time.value).toFormattedString).getOrElse("N/A")}</td>
                 #end
             </tr>
         #end

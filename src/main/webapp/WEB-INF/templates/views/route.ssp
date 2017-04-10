@@ -4,34 +4,77 @@ val title: String %>
 val busRoute: lbtweb.BusRoute %>
 <%@ import
 val stopList: List[lbtweb.BusStop] %>
+
 <script>
+    var lastClickedRow;
+    var fromIndex;
+    var toIndex;
 
     jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-    $(this).css("background-color", "#000000");
-    });
+        $(".clickable-row").click(function() {
+            var stopTable = document.getElementById("stop-table");
+            var clickedRowIndex = $(this).index()
+            if (lastClickedRow == null) {
+                lastClickedRow = clickedRowIndex
+                $(this).css("background-color", "#ffffe0");
+            } else {
+
+                if(lastClickedRow < clickedRowIndex) {fromIndex = lastClickedRow;}
+                else {fromIndex = clickedRowIndex;}
+
+                if(lastClickedRow > clickedRowIndex) {toIndex = lastClickedRow;}
+                else {toIndex = clickedRowIndex;}
+
+                $('#stop-table  > tbody  > tr').each(function() {
+                    $(this).css("background-color", "");
+                });
+
+                for (i = fromIndex; i <= toIndex; i++) {
+                    stopTable.rows[i].style.backgroundColor = "#ffffe0";
+                }
+                lastClickedRow = clickedRowIndex
+            }
+            if(typeof fromIndex != 'undefined' && typeof toIndex != 'undefined') {
+
+                var fromStopID = stopTable.rows[fromIndex].id;
+                var toStopID = stopTable.rows[toIndex].id;
+                $('#stopToStopLink').attr('href','/stopToStopArrivalHistoryStats/${busRoute.name}/${busRoute.direction}/' + fromStopID + '/' + toStopID);
+                $('#stopToStopLink').text('Overall arrival stats from stop ' + fromStopID + ' to ' + toStopID);
+
+                <% val now = org.joda.time.DateTime.now()
+                val secondOfWeek = ((now.getDayOfWeek -1) * 86400) + now.getSecondOfDay %>
+
+                $('#stopToStopLinkWIthTime').attr('href','/stopToStopArrivalHistoryStats/${busRoute.name}/${busRoute.direction}/' + fromStopID + '/' + toStopID + '?fromSecOfWeek=${(secondOfWeek - 7000).toString}&toSecOfWeek=${(secondOfWeek + 3600).toString}');
+                $('#stopToStopLinkWIthTime').text('Time specific arrival stats from stop ' + fromStopID + ' to ' + toStopID);
+            }
+         });
     });
 
 </script>
 <div class="row">
 <div class="span6">
     <h2><%= title %> </h2>
-    <p><a href="/routearrivalhistorydata/${busRoute.id}/${busRoute.direction}">Route Arrival History Data</a></p>
-    <p><a href="/routearrivalhistorystats/${busRoute.id}/${busRoute.direction}">Route Arrival History Stats</a></p>
-    <p>
-        <table class="table table-bordered">
-        <tr>
-            <td>Stop ID</td>
-            <td>Stop Name</td>
-        </tr>
-        #for(i <- stopList.indices)
-            <tr class="clickable-row">
-                <td><a href="/stoparrivalhistory/${stopList(i).id}">${stopList(i).id}</a></td>
-                <td>${stopList(i).name}</td>
-            </tr>
-        #end
-
+    <p><a href="/routearrivalhistorydata/${busRoute.name}/${busRoute.direction}">Route Arrival History Data</a></p>
+    <p><a href="/routearrivalhistorystats/${busRoute.name}/${busRoute.direction}">Route Arrival History Stats</a></p>
+    <p><a id="stopToStopLink"></a></p>
+    <p><a id="stopToStopLinkWIthTime"></a></p>
+        <p>
+        <table class="table table-bordered" id="stop-table" style="table-layout:fixed">
+            <thead>
+                <tr>
+                    <th>Stop ID</th>
+                    <th>Stop Name</th>
+                </tr>
+                </thead>
+            <tbody>
+                #for(i <- stopList.indices)
+                    <tr class="clickable-row" id="${stopList(i).stopID}">
+                        <td><a href="/stoparrivalhistory/${stopList(i).stopID}">${stopList(i).stopID}</a></td>
+                        <td>${stopList(i).stopName}</td>
+                    </tr>
+                #end
+            </tbody>
         </table>
-    </p>
+        </p>
 </div>
 </div>

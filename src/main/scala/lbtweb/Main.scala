@@ -7,7 +7,7 @@ import org.scalatra.servlet.ScalatraListener
 
 
 object Main extends App {
-    val port = if(System.getenv("PORT") != null) System.getenv("PORT").toInt else 8080
+    val port = if(System.getenv("PORT") != null) System.getenv("PORT").toInt else 8081
 
     val server = new Server(port)
     val context = new WebAppContext()

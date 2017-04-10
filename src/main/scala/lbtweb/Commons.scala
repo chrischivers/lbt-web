@@ -1,23 +1,24 @@
 package lbtweb
 
 
-import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import org.joda.time.{DateTime, Duration}
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, PeriodFormatterBuilder}
 
 case class Start()
 case class Stop()
 
-case class BusStop(id: String, name: String, longitude: Double, latitude: Double)
-case class BusRoute(id: String, direction: String)
-case class BusRouteWithTowards(id: String, direction: String, towards: String)
+case class BusStop(stopID: String, stopName: String, longitude: Double, latitude: Double)
+case class BusRoute(name: String, direction: String)
+case class BusRouteWithTowards(name: String, direction: String, towards: String)
+case class BusStopName(value: String)
+case class Journey(busRoute: BusRoute, vehicleReg: String, startingTimeMillis: Long, startingSecondOfWeek: Int)
+case class Source(value: String)
 
-case class IncomingHistoricalRecord(busRoute: BusRoute, vehicleID: String, stopRecords: List[IncomingVehicleStopRecord])
-case class IncomingVehicleStopRecord(seqNo: Int, busStop: BusStop, arrivalTime: Long)
+case class IncomingHistoricalJourneyRecord(journey: Journey, source: Source, stopRecords: List[IncomingHistoricalArrivalRecord])
+case class IncomingHistoricalArrivalRecord(seqNo: Int, busStop: BusStop, arrivalTime: Long)
+case class IncomingHistoricalStopRecord(stopID: String, arrivalTime: Long, journey: Journey, source: Source)
 
-//case class TimeParameters(dayOfWeek: Int, hourBeginning: Int)
-case class Stats(average: Int, min: Int, max: Int)
-//case class TimePeriodStats(timeParamsToStats: Map[TimeParameters, Stats])
-//case class RouteTimePeriodStats(stopIDToTimePeriodStats: Map[String, TimePeriodStats])
+case class Stats(average: Duration, min: Duration, max: Duration)
 
 case class VehicleReg(value: String)
 
@@ -39,6 +40,18 @@ object Commons {
 
   def average[T]( ts: Iterable[T] )( implicit num: Numeric[T] ) = {
     num.toDouble( ts.sum ) / ts.size
+  }
+
+  def durationToFormattedDuration(duration: Duration) = {
+    val formatter = new PeriodFormatterBuilder()
+      .appendHours()
+      .appendSuffix("h ")
+      .appendMinutes()
+      .appendSuffix("m ")
+      .appendSeconds()
+      .appendSuffix("s ")
+      .toFormatter
+    formatter.print(duration.toPeriod())
   }
 }
 

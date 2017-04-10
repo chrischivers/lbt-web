@@ -1,9 +1,7 @@
 <%@ import
 val title: String %>
 <%@ import
-val busStopOpt: Option[lbtweb.BusStop]%>
-<%@ import
-val stopArrivalList: List[(lbtweb.BusRoute, lbtweb.VehicleReg, lbtweb.ArrivalTime)] %>
+val stopArrivalList: List[(lbtweb.Journey, lbtweb.Source, lbtweb.ArrivalTime)]  %>
 <div class="row">
 <div class="span6">
     <h2><%= title %> </h2>
@@ -15,9 +13,16 @@ val stopArrivalList: List[(lbtweb.BusRoute, lbtweb.VehicleReg, lbtweb.ArrivalTim
             <td>Arrived at</td>
         </tr>
         #for(i <- stopArrivalList.indices)
-            <tr>
-                <td> <a href="/routearrivalhistorydata/${stopArrivalList(i)._1.id}/${stopArrivalList(i)._1.direction}">${stopArrivalList(i)._1.id}, ${stopArrivalList(i)._1.direction}</a></td>
-                <td><a href="/vehiclearrivalhistory/${stopArrivalList(i)._2.value}">${stopArrivalList(i)._2.value}</a></td>
+
+            <%val backgroundCol = stopArrivalList(i)._2.value match {
+            case "Live" => "#ffff99"
+            case "DB" => "#99ccff"
+            case _ => "#ffffff"
+            }%>
+
+            <tr bgcolor="${backgroundCol}">
+                <td> <a href="/routearrivalhistorydata/${stopArrivalList(i)._1.busRoute.name}/${stopArrivalList(i)._1.busRoute.direction}">${stopArrivalList(i)._1.busRoute.name}, ${stopArrivalList(i)._1.busRoute.direction}</a></td>
+                <td><a href="/vehiclearrivalhistory/${stopArrivalList(i)._1.vehicleReg}">${stopArrivalList(i)._1.vehicleReg}</a></td>
                 <td>${stopArrivalList(i)._3.toFormattedString}</td>
             </tr>
         #end

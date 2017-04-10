@@ -22,12 +22,12 @@ val title: String %>
                 <tr>
                     <td>
                         ${h + 1},
-                        <a href="/stoparrivalhistory/${stopDefList(h).id}">${stopDefList(h).id}</a>,
-                        ${stopDefList(h).name}
+                        <a href="/stoparrivalhistory/${stopDefList(h).stopID}">${stopDefList(h).stopID}</a>,
+                        ${stopDefList(h).stopName}
                     </td>
-                    <td align="center">${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(_.average).getOrElse("N/A")}</td>
-                    <td align="center"> ${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(_.min).getOrElse("N/A")}</td>
-                    <td align="center">${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(_.max).getOrElse("N/A")}</td>
+                    <td align="center">${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(stats => lbtweb.Commons.durationToFormattedDuration(stats.average)).getOrElse("N/A")}</td>
+                    <td align="center"> ${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(stats => lbtweb.Commons.durationToFormattedDuration(stats.min)).getOrElse("N/A")}</td>
+                    <td align="center">${routeArrivalList.get(lbtweb.SequenceNo(h + 1)).map(stats => lbtweb.Commons.durationToFormattedDuration(stats.max)).getOrElse("N/A")}</td>
                 </tr>
             #end
             </tr>

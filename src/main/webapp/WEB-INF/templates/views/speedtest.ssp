@@ -1,0 +1,22 @@
+<%@ import
+val title: String %>
+<%@ import
+val speedTestMap: Map[String, Long]  %>
+<div class="row">
+<div class="span6">
+    <h2><%= title %> </h2>
+    <p>
+        <table class="table table-bordered">
+        <tr>
+            <td>Endpoint</td>
+            <td>Response time (ms)</td>
+        </tr>
+        #for(i <- speedTestMap.keys)
+            <tr>
+                <td>${i}</td>
+            <td>${speedTestMap(i)}</td>
+        #end
+        </table>
+    </p>
+</div>
+</div>
