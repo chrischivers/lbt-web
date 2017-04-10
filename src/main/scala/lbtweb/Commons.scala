@@ -1,7 +1,7 @@
 package lbtweb
 
 
-import org.joda.time.{DateTime, Duration}
+import org.joda.time.{DateTime, DateTimeZone, Duration}
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter, PeriodFormatterBuilder}
 
 case class Start()
@@ -24,7 +24,8 @@ case class VehicleReg(value: String)
 
 case class ArrivalTime(value: Long) {
   private val dtf: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")
-  def toFormattedString: String = dtf.print(value)
+  val dateTime = new DateTime(value, DateTimeZone.forID("Europe/London"))
+  def toFormattedString: String = dtf.print(dateTime)
 }
 case class SequenceNo(value: Int)
 
